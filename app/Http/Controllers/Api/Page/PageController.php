@@ -112,7 +112,7 @@ class PageController extends Controller
         $validated = $request->validate([
             'name' => 'sometimes|required|string',
             'label' => 'sometimes|nullable|string',
-            'album_id' => 'sometimes|nullable|exists:albums,id',
+            'album_id' => 'nullable',
             'contents' => 'sometimes|required|string',
             'status' => 'sometimes|required|in:published,private',
             'meta_title' => 'sometimes|nullable|string',
