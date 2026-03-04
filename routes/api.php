@@ -112,9 +112,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/product-categories/restore', [ProductCategoryController::class, 'restore']);
     Route::post('/product-categories/{id}/restore', [ProductCategoryController::class, 'restoreById']);
 
-    Route::get('/products', [ProductController::class, 'index']);
+    //admin products
     Route::post('/products', [ProductController::class, 'store']);
-    Route::get('/products/{product}', [ProductController::class, 'show']);
     Route::put('/products/{product}', [ProductController::class, 'update']);
     Route::patch('/products/{product}', [ProductController::class, 'update']);
     Route::delete('/products/{product}', [ProductController::class, 'destroy']);
@@ -185,3 +184,6 @@ Route::get('/public-article-categories', [PublicPageController::class, 'public_a
 Route::get('/public-articles-archive', [PublicPageController::class, 'archive']);
 
 Route::post('/contact', [PublicPageController::class, 'send']);
+
+Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products/{product}', [ProductController::class, 'show']);
