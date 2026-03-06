@@ -1,29 +1,30 @@
 <?php
 
-use Illuminate\Http\Request;
-use Laravel\Sanctum\Sanctum;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\MenuController;
-use App\Http\Controllers\Api\RoleController;
-use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\AlbumController;
-use App\Http\Controllers\Api\OptionController;
 use App\Http\Controllers\Api\AccountController;
+use App\Http\Controllers\Api\AiAssistantController;
+use App\Http\Controllers\Api\AlbumController;
+use App\Http\Controllers\Api\ArticleCategoryController;
 use App\Http\Controllers\Api\ArticleController;
-use App\Http\Controllers\Api\SearchController;
-use App\Http\Controllers\Api\ProductController;
-use App\Http\Controllers\Api\ProductCategoryController;
+use App\Http\Controllers\Api\AuditTrailController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\DashboardController;
-use App\Http\Controllers\Api\Page\PageController;
-use App\Http\Controllers\Api\AuditTrailController;
-use App\Http\Controllers\Api\AiAssistantController;
 use App\Http\Controllers\Api\FileManagerController;
 use App\Http\Controllers\Api\LayoutPresetController;
-use App\Http\Controllers\Api\WebsiteSettingController;
-use App\Http\Controllers\Api\ArticleCategoryController;
+use App\Http\Controllers\Api\MenuController;
+use App\Http\Controllers\Api\OptionController;
+use App\Http\Controllers\Api\Page\PageController;
 use App\Http\Controllers\Api\Page\PublicPageController;
 use App\Http\Controllers\Api\PermissionMatrixController;
+use App\Http\Controllers\Api\ProductCategoryController;
+use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\SearchController;
+use App\Http\Controllers\Api\TestimonialController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\WebsiteSettingController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Laravel\Sanctum\Sanctum;
 
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -187,3 +188,5 @@ Route::post('/contact', [PublicPageController::class, 'send']);
 
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{product}', [ProductController::class, 'show']);
+
+Route::apiResource('testimonials', TestimonialController::class);
