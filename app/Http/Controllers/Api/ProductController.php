@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -326,5 +327,43 @@ class ProductController extends Controller
         }
 
         return $slug;
+    }
+
+    public function fetch_products(Request $request): JsonResponse
+    {
+        $perPage = (int) $request->query('per_page', 100);
+        $perPage = min($perPage, 1000); // hard cap
+
+        $products = Product::with('category')
+            ->where('status', 'active')
+            ->orderBy('name')
+            ->paginate($perPage);
+
+        $items = $products->getCollection()->map(fn (Product $p) => [
+            'id'          => $p->id,
+            'slug'        => $p->slug,
+            'name'        => $p->name,
+            'description' => $p->description,
+            'price'       => $p->price,
+            'image_url'   => $p->image_url
+                                ? asset('storage/' . $p->image_url)
+                                : null,
+            'category_id' => $p->category_id,
+            'category'    => $p->category ? [
+                'id'   => $p->category->id,
+                'name' => $p->category->name,
+                'slug' => $p->category->slug,
+            ] : null,
+        ]);
+
+        return response()->json([
+            'data' => $items,
+            'meta' => [
+                'total'        => $products->total(),
+                'per_page'     => $products->perPage(),
+                'current_page' => $products->currentPage(),
+                'last_page'    => $products->lastPage(),
+            ],
+        ]);
     }
 }

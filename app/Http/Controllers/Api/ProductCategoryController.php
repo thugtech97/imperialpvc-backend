@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Models\ProductCategory;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ProductCategoryController extends Controller
 {
@@ -149,5 +150,30 @@ class ProductCategoryController extends Controller
         }
 
         return $slug;
+    }
+
+    public function fetch_categories(Request $request): JsonResponse
+    {
+        $perPage = (int) $request->query('per_page', 100);
+        $perPage = min($perPage, 1000);
+
+        $categories = ProductCategory::orderBy('name')
+            ->paginate($perPage);
+
+        $items = $categories->getCollection()->map(fn (ProductCategory $c) => [
+            'id'   => $c->id,
+            'name' => $c->name,
+            'slug' => $c->slug,
+        ]);
+
+        return response()->json([
+            'data' => $items,
+            'meta' => [
+                'total'        => $categories->total(),
+                'per_page'     => $categories->perPage(),
+                'current_page' => $categories->currentPage(),
+                'last_page'    => $categories->lastPage(),
+            ],
+        ]);
     }
 }

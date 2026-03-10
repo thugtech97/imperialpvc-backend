@@ -190,3 +190,6 @@ Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{product}', [ProductController::class, 'show']);
 
 Route::apiResource('testimonials', TestimonialController::class);
+
+Route::get('/public-products', [ProductController::class, 'fetch_products']);
+Route::get('/public-product-categories', [ProductCategoryController::class, 'fetch_categories']);
